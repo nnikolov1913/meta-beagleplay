@@ -1,0 +1,71 @@
+Index: git/include/configs/ti_armv7_common.h
+===================================================================
+--- git.orig/include/configs/ti_armv7_common.h
++++ git/include/configs/ti_armv7_common.h
+@@ -170,8 +170,8 @@
+ 
+ #ifdef CONFIG_CMD_MMC
+ #define BOOT_TARGET_MMC(func) \
+-	func(MMC, mmc, 0) \
+-	func(MMC, mmc, 1)
++	func(MMC, mmc, 1) \
++	func(MMC, mmc, 0)
+ #else
+ #define BOOT_TARGET_MMC(func)
+ #endif
+Index: git/include/config_distro_bootcmd.h
+===================================================================
+--- git.orig/include/config_distro_bootcmd.h
++++ git/include/config_distro_bootcmd.h
+@@ -28,6 +28,7 @@
+ #define BOOTENV_SHARED_BLKDEV_BODY(devtypel) \
+ 		"if " #devtypel " dev ${devnum}; then " \
+ 			"devtype=" #devtypel "; " \
++			"run finduuid; " \
+ 			"run scan_dev_for_boot_part; " \
+ 		"fi\0"
+ 
+Index: git/board/ti/am62x/beagleplay.env
+===================================================================
+--- git.orig/board/ti/am62x/beagleplay.env
++++ git/board/ti/am62x/beagleplay.env
+@@ -1,7 +1,7 @@
+ #include <environment/ti/ti_armv7_common.env>
+ #include <environment/ti/mmc.env>
+ 
+-default_device_tree=ti/k3-am625-beagleplay.dtb
++default_device_tree=k3-am625-beagleplay.dtb
+ findfdt=
+ 	setenv name_fdt ${default_device_tree};
+ 	setenv fdtfile ${name_fdt}
+Index: git/configs/am625_beagleplay_a53.config
+===================================================================
+--- git.orig/configs/am625_beagleplay_a53.config
++++ git/configs/am625_beagleplay_a53.config
+@@ -11,3 +11,4 @@ CONFIG_AUTOBOOT_PROMPT="Press SPACE to a
+ CONFIG_AUTOBOOT_DELAY_STR="d"
+ CONFIG_AUTOBOOT_STOP_STR=" "
+ CONFIG_PHY_REALTEK=y
++#CONFIG_ENV_SOURCE_FILE="beagleplay.env"
+Index: git/board/ti/am62x/am62x.env
+===================================================================
+--- git.orig/board/ti/am62x/am62x.env
++++ git/board/ti/am62x/am62x.env
+@@ -7,7 +7,7 @@
+ #include <environment/ti/k3_rproc.env>
+ #endif
+ 
+-default_device_tree=ti/k3-am625-sk.dtb
++default_device_tree=k3-am625-sk.dtb
+ findfdt=
+ 	setenv name_fdt ${default_device_tree};
+ 	if test $board_name = am62x_skevm; then
+@@ -19,7 +19,7 @@ findfdt=
+ 	if test $board_name = am62x_lp_skevm; then
+ 			setenv name_fdt ti/k3-am62-lp-sk.dtb; fi;
+ 	if test $board_name = am62x_beagleplay; then
+-			setenv name_fdt ti/k3-am625-beagleplay.dtb; fi;
++			setenv name_fdt k3-am625-beagleplay.dtb; fi;
+ 	setenv fdtfile ${name_fdt}
+ name_kern=Image
+ console=ttyS2,115200n8
