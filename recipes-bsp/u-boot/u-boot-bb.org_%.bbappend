@@ -1,6 +1,6 @@
 FILESEXTRAPATHS:append := "${THISDIR}/files:"
 
-SRC_URI:append = " file://0001-change-mmc-order.patch"
+SRC_URI:append = " file://0001-make-it-boot.patch"
 
 UBOOT_EXTLINUX = "1"
 UBOOT_EXTLINUX_ROOT = "root=PARTUUID=${uuid}"
